@@ -69,6 +69,8 @@ varnish:
     VARNISH_OPTS: -T 0.0.0.0:6082
 
 mail:
-  image: munkyboy/fakesmtp
+  image: schickling/mailcatcher
+  ports:
+    - 1080:1080
   volumes:
   - ./logs/mail:/var/mail
