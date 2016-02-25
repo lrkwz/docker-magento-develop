@@ -22,6 +22,13 @@ db:
     volumes_from:
       - application
 
+dbadmin:
+  image: corbinu/docker-phpmyadmin
+  ports:
+    - 2080:80
+  links:
+    - db:mysql
+
 php:
     build: provision/php-fpm
     ports:

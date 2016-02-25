@@ -6,7 +6,7 @@ MAINTAINER Luca Orlandi <luca.orlandi@gmail.com>
 RUN apt-get update && apt-get install -y libpng12-dev libjpeg-dev libmcrypt-dev libcurl4-openssl-dev libicu-dev \
  && rm -rf /var/lib/apt/lists/* \
  && docker-php-ext-configure gd --with-png-dir=/usr --with-jpeg-dir=/usr \
- && docker-php-ext-install gd mysql opcache curl mcrypt intl pdo pdo_mysql mbstring \
+ && docker-php-ext-install gd opcache curl mcrypt intl pdo pdo_mysql mbstring \
  && pecl install xdebug
 
 ADD magento.ini /etc/php5/fpm/conf.d/
