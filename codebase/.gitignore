@@ -1,4 +1,7 @@
 .htaccess.sample
+.buildpath
+.settings/
+.project
 .modgit/
 .modman/
 app/code/community/Phoenix/
