@@ -1,28 +1,7 @@
 # This is a basic VCL configuration file for PageCache powered by Varnish for Magento module.
 
-# default backend definition.  Set this to point to your content server.
-backend default {
-  .host = "backend";
-  .port = "80";
-}
-
-# admin backend with longer timeout values. Set this to the same IP & port as your default server.
-backend admin {
-  .host = "backend";
-  .port = "80";
-  .first_byte_timeout = 18000s;
-  .between_bytes_timeout = 18000s;
-}
-
-# add your Magento server IP to allow purges from the backend
-acl purge {
-  "localhost";
-  "127.0.0.1";
-  "172.17.0.1"; # Ip dell'host docker
-  "83.103.96.33"; # Ip della rete more
-}
-
 import std;
+include "local.vcl";
 
 sub vcl_recv {
     if (req.restarts == 0) {
