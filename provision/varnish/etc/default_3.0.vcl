@@ -19,6 +19,7 @@ sub vcl_recv {
         req.request != "TRACE" &&
         req.request != "OPTIONS" &&
         req.request != "DELETE" &&
+        req.request != "BAN" &&
         req.request != "PURGE") {
         /* Non-RFC2616 or CONNECT which is weird. */
         return (pipe);
@@ -342,11 +343,6 @@ sub vcl_error {
         set obj.http.Location = obj.response;
         set obj.status = 301;
         return(deliver);
-    }
-
-    # error 200
-    if (obj.status == 200) {
-        return (deliver);
     }
 
      set obj.http.Content-Type = "text/html; charset=utf-8";
