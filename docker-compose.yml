@@ -31,6 +31,8 @@ dbadmin:
 
 php:
     build: provision/php-fpm
+    environment:
+      XDEBUG_CONFIG: remote_host={{172.17.0.1}}
     ports:
         - 9000:9000
     volumes:

@@ -6,20 +6,25 @@ MAINTAINER Luca Orlandi <luca.orlandi@gmail.com>
 RUN apt-get update && apt-get install -y libpng12-dev libjpeg-dev libmcrypt-dev libcurl4-openssl-dev libicu-dev \
  && rm -rf /var/lib/apt/lists/* \
  && docker-php-ext-configure gd --with-png-dir=/usr --with-jpeg-dir=/usr \
- && docker-php-ext-install gd opcache curl mcrypt intl pdo pdo_mysql mbstring \
- && pecl install xdebug
+ && docker-php-ext-install gd opcache curl mcrypt intl pdo pdo_mysql mbstring
 
-ADD magento.ini /etc/php5/fpm/conf.d/
-ADD magento.ini /etc/php5/cli/conf.d/
-ADD magento.pool.conf /etc/php5/fpm/pool.d/
-ADD 20-xdebug.ini  /etc/php5/fpm/conf.d/
-ADD 20-xdebug.ini  /etc/php5/cli/conf.d/
-
-RUN usermod -u 1000 www-data
+RUN yes | pecl install xdebug \
+     && echo "zend_extension=$(find /usr/local/lib/php/extensions/ -name xdebug.so)" > /usr/local/etc/php/conf.d/xdebug.ini \
+     && echo "xdebug.remote_enable=on" >> /usr/local/etc/php/conf.d/xdebug.ini \
+     && echo "xdebug.remote_autostart=off" >> /usr/local/etc/php/conf.d/xdebug.ini \
+     && cp /usr/local/etc/php/conf.d/xdebug.ini /usr/local/etc/php-fpm.d/
 
 RUN apt-get update && apt-get install -y msmtp
 ADD msmtprc /etc/.msmtp_php
 RUN chown www-data. /etc/.msmtp_php && chmod 600 /etc/.msmtp_php
+
+#ADD magento.ini /usr/local/etc/php-fpm.d/magento.conf
+ADD magento.ini /usr/local/etc/php/conf.d/
+ADD magento.pool.conf /usr/local/etc/php-fpm.d/www.conf
+#ADD 20-xdebug.ini  /usr/local/etc/php-fpm.d/20-xdebug.conf
+#ADD 20-xdebug.ini  /usr/local/etc/php/conf.d/
+
+RUN usermod -u 1000 www-data
 
 RUN apt-get install -y cron
 ADD crontab /etc/cron.d/magento
